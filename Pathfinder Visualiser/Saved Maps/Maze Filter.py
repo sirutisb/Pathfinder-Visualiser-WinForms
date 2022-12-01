@@ -19,6 +19,6 @@ file = open(mapName, 'w')
 file.write(mapData)
 file.close()
 
-print("\n\nFiltered Map:")
+print("\nSaved Map into: " + mapname + ".txt\nFiltered Map:")
 print(mapData)
 input()

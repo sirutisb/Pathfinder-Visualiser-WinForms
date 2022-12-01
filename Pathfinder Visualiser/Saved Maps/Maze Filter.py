@@ -1,5 +1,6 @@
 # https://www.dcode.fr/maze-generator use settings 30,30 black block, empty space and single character
-# lmao this is a maze stealer/scraper
+# This is a maze scraper
+# It's kinda broken, if you can figure out how to use it.
 
 mapData = ""
 mapSize = int(input("Map Size: "))
@@ -19,6 +20,6 @@ file = open(mapName, 'w')
 file.write(mapData)
 file.close()
 
-print("\nSaved Map into: " + mapname + ".txt\nFiltered Map:")
+print("\nSaved Map into: " + mapName + ".txt\nFiltered Map:")
 print(mapData)
 input()

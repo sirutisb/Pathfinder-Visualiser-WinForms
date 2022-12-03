@@ -18,16 +18,15 @@ namespace New_Pathfinder
             InitializeComponent();
         }
 
+        // Initialisation
         const int maxGridSize = 256;
-        Grid[,] grid = new Grid[maxGridSize, maxGridSize];
         int nodeSize = 75;
         int gridSize = 0;
-
-        Point StartPos = new Point(0, 0);
-        Point EndPos = new Point(1, 1);
-
-        List<Point> Path = new List<Point>();
-        List<Point> RevealPath = new List<Point>();
+        Grid[,] grid = new Grid[maxGridSize, maxGridSize];
+        Point startPos = new Point(0, 0);
+        Point endPos = new Point(1, 1);
+        List<Point> path = new List<Point>();
+        List<Point> revealPath = new List<Point>();
 
         // Brushes
         Brush foregroundBrush = Brushes.LightBlue;
@@ -36,8 +35,8 @@ namespace New_Pathfinder
         Brush obstacleBrush = new SolidBrush(Color.FromArgb(35, 35, 35));
 
 
-        bool shift;
-        bool ctrl;
+        bool shift; // Is Shift Held Down
+        bool ctrl; // Is Ctrl Held Down
 
         private void CreateGrid()
         {
@@ -46,7 +45,7 @@ namespace New_Pathfinder
                 AutoResize();
             Size = new Size(gridSize * nodeSize + 200 + 16, gridSize * nodeSize + 39);
             gridSizeLabel.Text = "Grid Size: " + gridSize.ToString();
-            Path.Clear();
+            path.Clear();
             gridPictureBox.Invalidate();
         }
 
@@ -96,9 +95,9 @@ namespace New_Pathfinder
             {
                 for (int x = 0; x < gridSize; x++)
                 {
-                    if (x == StartPos.X && y == StartPos.Y)
+                    if (x == startPos.X && y == startPos.Y)
                         mapData += '2';
-                    else if (x == EndPos.X && y == EndPos.Y)
+                    else if (x == endPos.X && y == endPos.Y)
                         mapData += '3';
                     else if (grid[x, y].isObstacle)
                         mapData += '1';
@@ -106,20 +105,14 @@ namespace New_Pathfinder
                         mapData += '0';
                 }
             }
-
             SaveFileDialog fileDialog = new SaveFileDialog();
-
             fileDialog.Title = "Select Map File";
-            //fileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
             fileDialog.Filter = "pmap files (*.pmap)|*.pmap|All files (*.*)|*.*";
             fileDialog.RestoreDirectory = true;
-
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 using (StreamWriter sw = new StreamWriter(fileDialog.FileName))
-                {
                     sw.Write(mapData);
-                }
             }
         }
 
@@ -127,9 +120,8 @@ namespace New_Pathfinder
         {
             string mapData = "";
             using (StreamReader sr = new StreamReader(fileName))
-            {
                 mapData = sr.ReadToEnd();
-            }
+
             gridSize = (int)Math.Sqrt(mapData.Length);
             for (int y = 0; y < gridSize; y++)
             {
@@ -137,9 +129,9 @@ namespace New_Pathfinder
                 {
                     grid[x, y] = new Grid();
                     if (mapData[y * gridSize + x] == '2')
-                        StartPos = new Point(x, y);
+                        startPos = new Point(x, y);
                     else if (mapData[y * gridSize + x] == '3')
-                        EndPos = new Point(x, y);
+                        endPos = new Point(x, y);
                     else if (mapData[y * gridSize + x] == '1')
                         grid[x, y].isObstacle = true;
                 }
@@ -161,9 +153,9 @@ namespace New_Pathfinder
         }
         private void clearGridButton_Click(object sender, EventArgs e)
         {
-            Path.Clear();
-            StartPos = new Point(0, 0);
-            EndPos = new Point(1, 1);
+            path.Clear();
+            startPos = new Point(0, 0);
+            endPos = new Point(1, 1);
             for (int y = 0; y < gridSize; y++)
             {
                 for (int x = 0; x < gridSize; x++)
@@ -173,7 +165,7 @@ namespace New_Pathfinder
         }
         private void findPathButton_Click(object sender, EventArgs e)
         {
-            findPath();
+            findPathDijkstra();
         }
         private void gridPictureBox_Paint(object sender, PaintEventArgs e)
         {
@@ -189,9 +181,6 @@ namespace New_Pathfinder
                     else
                     {
                         e.Graphics.FillRectangle(foregroundBrush, rect);
-
-
-
                         if (showNodeInfoCheckBox.Checked)
                         {
                             string nodeInfoText = "";
@@ -205,17 +194,17 @@ namespace New_Pathfinder
                     }
                 }
             }
-            RectangleF rectangle = new RectangleF(StartPos.X * nodeSize, StartPos.Y * nodeSize, nodeSize, nodeSize);
+            RectangleF rectangle = new RectangleF(startPos.X * nodeSize, startPos.Y * nodeSize, nodeSize, nodeSize);
             e.Graphics.FillRectangle(startBrush, rectangle);
-            rectangle.X = EndPos.X * nodeSize;
-            rectangle.Y = EndPos.Y * nodeSize;
+            rectangle.X = endPos.X * nodeSize;
+            rectangle.Y = endPos.Y * nodeSize;
             e.Graphics.FillRectangle(endBrush, rectangle);
 
             // Show Path
-            for (int i = 0; i < Path.Count; i++)
+            for (int i = 0; i < path.Count; i++)
             {
-                rectangle.X = Path[i].X * nodeSize;
-                rectangle.Y = Path[i].Y * nodeSize;
+                rectangle.X = path[i].X * nodeSize;
+                rectangle.Y = path[i].Y * nodeSize;
                 e.Graphics.FillRectangle(Brushes.Purple, rectangle);
             }
 
@@ -253,20 +242,20 @@ namespace New_Pathfinder
         }
         private void revealPathTimer_Tick(object sender, EventArgs e)
         {
-            if (RevealPath.Count == 0)
+            // Start revealing a part of the path each timer tick.
+            if (revealPath.Count == 0)
             {
                 revealPathTimer.Stop();
                 return;
             }
-
-            Path.Add(RevealPath[0]);
-            RevealPath.RemoveAt(0);
+            path.Add(revealPath[0]);
+            revealPath.RemoveAt(0);
             gridPictureBox.Invalidate();
         }
 
-        void VisitNode(ref Point currentPos, ref Point neighbourPos, ref Queue<Point> visitedNodes) // for better code implement this
+        void VisitNode(Point currentPos, int x, int y, ref Queue<Point> visitedNodes)
         {
-            neighbourPos = new Point(currentPos.X, currentPos.Y - 1);
+            Point neighbourPos = new Point(currentPos.X + x, currentPos.Y + y);
             if (!grid[neighbourPos.X, neighbourPos.Y].isObstacle && !grid[neighbourPos.X, neighbourPos.Y].isVisited)
             {
                 int currentDistance = grid[currentPos.X, currentPos.Y].distanceFromStart + 1;
@@ -279,13 +268,10 @@ namespace New_Pathfinder
             }
         }
 
-        void findPath()
+        void findPathDijkstra()
         {
-            Path.Clear();
-            RevealPath.Clear();
-
-            Point currentPos = StartPos;
-            Point neighbourPos;
+            path.Clear();
+            revealPath.Clear();
 
             // Reset variables
             for (int y = 0; y < gridSize; y++)
@@ -298,79 +284,21 @@ namespace New_Pathfinder
                 }
             }
 
-            grid[StartPos.X, StartPos.Y].distanceFromStart = 0;
-            grid[StartPos.X, StartPos.Y].previousVertex = StartPos;
+            grid[startPos.X, startPos.Y].distanceFromStart = 0;
+            grid[startPos.X, startPos.Y].previousVertex = startPos;
 
+            Point currentPos = startPos;
             Queue<Point> visitedNodes = new Queue<Point>();
-
-            while (currentPos != EndPos)
+            while (currentPos != endPos)
             {
-                int currentDistance;
-
-                // Up
-                if (currentPos.Y > 0)
-                {
-                    neighbourPos = new Point(currentPos.X, currentPos.Y - 1);
-                    if (!grid[neighbourPos.X, neighbourPos.Y].isObstacle && !grid[neighbourPos.X, neighbourPos.Y].isVisited)
-                    {
-                        currentDistance = grid[currentPos.X, currentPos.Y].distanceFromStart + 1;
-                        if (currentDistance < grid[neighbourPos.X, neighbourPos.Y].distanceFromStart)
-                        {
-                            grid[neighbourPos.X, neighbourPos.Y].distanceFromStart = currentDistance;
-                            grid[neighbourPos.X, neighbourPos.Y].previousVertex = currentPos;
-                            visitedNodes.Enqueue(neighbourPos);
-                        }
-
-                    }
-                }
-
-                // Left
-                if (currentPos.X > 0)
-                {
-                    neighbourPos = new Point(currentPos.X - 1, currentPos.Y);
-                    if (!grid[neighbourPos.X, neighbourPos.Y].isObstacle && !grid[neighbourPos.X, neighbourPos.Y].isVisited)
-                    {
-                        currentDistance = grid[currentPos.X, currentPos.Y].distanceFromStart + 1;
-                        if (currentDistance < grid[neighbourPos.X, neighbourPos.Y].distanceFromStart)
-                        {
-                            grid[neighbourPos.X, neighbourPos.Y].distanceFromStart = currentDistance;
-                            grid[neighbourPos.X, neighbourPos.Y].previousVertex = currentPos;
-                            visitedNodes.Enqueue(neighbourPos);
-                        }
-                    }
-                }
-
-                // Down
-                if (currentPos.Y < gridSize - 1)
-                {
-                    neighbourPos = new Point(currentPos.X, currentPos.Y + 1);
-                    if (!grid[neighbourPos.X, neighbourPos.Y].isObstacle && !grid[neighbourPos.X, neighbourPos.Y].isVisited)
-                    {
-                        currentDistance = grid[currentPos.X, currentPos.Y].distanceFromStart + 1;
-                        if (currentDistance < grid[neighbourPos.X, neighbourPos.Y].distanceFromStart)
-                        {
-                            grid[neighbourPos.X, neighbourPos.Y].distanceFromStart = currentDistance;
-                            grid[neighbourPos.X, neighbourPos.Y].previousVertex = currentPos;
-                            visitedNodes.Enqueue(neighbourPos);
-                        }
-                    }
-                }
-
-                // Right
-                if (currentPos.X < gridSize - 1)
-                {
-                    neighbourPos = new Point(currentPos.X + 1, currentPos.Y);
-                    if (!grid[neighbourPos.X, neighbourPos.Y].isObstacle && !grid[neighbourPos.X, neighbourPos.Y].isVisited)
-                    {
-                        currentDistance = grid[currentPos.X, currentPos.Y].distanceFromStart + 1;
-                        if (currentDistance < grid[neighbourPos.X, neighbourPos.Y].distanceFromStart)
-                        {
-                            grid[neighbourPos.X, neighbourPos.Y].distanceFromStart = currentDistance;
-                            grid[neighbourPos.X, neighbourPos.Y].previousVertex = currentPos;
-                            visitedNodes.Enqueue(neighbourPos);
-                        }
-                    }
-                }
+                if (currentPos.Y > 0) // Up
+                    VisitNode(currentPos, 0, -1, ref visitedNodes);
+                if (currentPos.X > 0) // Left
+                    VisitNode(currentPos, -1, 0, ref visitedNodes);
+                if (currentPos.Y < gridSize - 1) // Down
+                    VisitNode(currentPos, 0, 1, ref visitedNodes);
+                if (currentPos.X < gridSize - 1) // Right
+                    VisitNode(currentPos, 1, 0, ref visitedNodes);
 
                 if (visitedNodes.Count == 0) // Reached dead end, path not found.
                 {
@@ -382,22 +310,21 @@ namespace New_Pathfinder
                 currentPos = visitedNodes.Dequeue();
             }
 
-            Point previous = EndPos;
-
-            while (grid[previous.X, previous.Y].previousVertex != StartPos)
+            Point previous = endPos;
+            while (grid[previous.X, previous.Y].previousVertex != startPos) // Backtracking
             {
                 previous = grid[previous.X, previous.Y].previousVertex;
-                Path.Add(previous);
+                path.Add(previous);
             }
-            Path.Reverse();
+            path.Reverse();
             gridPictureBox.Invalidate();
 
-            pathLengthLabel.Text = "Path Length: " + (Path.Count + 1).ToString();
+            pathLengthLabel.Text = "Path Length: " + (path.Count + 1).ToString();
 
             if(revealPathCheckBox.Checked)
             {
-                RevealPath = new List<Point>(Path);
-                Path.Clear();
+                revealPath = new List<Point>(path);
+                path.Clear();
                 revealPathTimer.Start();
             }
         }
@@ -434,28 +361,28 @@ namespace New_Pathfinder
             if (pos.X >= maxGridSize || pos.Y >= maxGridSize) return;
             if (pos.X < 0 || pos.Y < 0) return;
             if (pos.X >= gridSize || pos.Y >= gridSize) return; // Keep in range of current map size
-            if (pos == StartPos || pos == EndPos) return; // Dont allow to replace start/end pos.
+            if (pos == startPos || pos == endPos) return; // Dont allow to replace start/end pos.
 
             if (shift)
             {
                 grid[pos.X, pos.Y].isObstacle = false;
-                StartPos = pos;
+                startPos = pos;
             }
             else if (ctrl)
             {
                 grid[pos.X, pos.Y].isObstacle = false;
-                EndPos = pos;
+                endPos = pos;
             }
             else
             {
                 grid[pos.X, pos.Y].isObstacle = !grid[pos.X, pos.Y].isObstacle;
             }
 
-            Path.Clear();
+            path.Clear();
             gridPictureBox.Invalidate();
 
             if (autoPathfindCheckBox.Checked) // auto find path after modifying (experimental)
-                findPath();
+                findPathDijkstra();
         }
 
         int r = 255, g = 0, b = 0;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pathfinder_Visualiser;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -163,9 +164,29 @@ namespace New_Pathfinder
             }
             gridPictureBox.Invalidate();
         }
+
+        void FindPathDijkstra()
+        {
+            path = Dijkstra.FindPath(ref grid, startPos, endPos, gridSize);
+            if (path == null) // Reached dead end, path not found.
+            {
+                pathLengthLabel.Text = "Path Length: ∞";
+                return;
+            }
+            if (revealPathCheckBox.Checked)
+            {
+                revealPath = new List<Point>(path);
+                path.Clear();
+                revealPathTimer.Start();
+            }
+
+            pathLengthLabel.Text = "Path Length: " + (path.Count + 1).ToString();
+            gridPictureBox.Invalidate();
+        }
+
         private void findPathButton_Click(object sender, EventArgs e)
         {
-            findPathDijkstra();
+            FindPathDijkstra();
         }
         private void gridPictureBox_Paint(object sender, PaintEventArgs e)
         {
@@ -207,7 +228,6 @@ namespace New_Pathfinder
                 rectangle.Y = path[i].Y * nodeSize;
                 e.Graphics.FillRectangle(Brushes.Purple, rectangle);
             }
-
         }
         private void Form_KeyDown(object sender, KeyEventArgs e)
         {
@@ -223,14 +243,12 @@ namespace New_Pathfinder
             if (!e.Control)
                 ctrl = false;
         }
-
         private void gridSizeTrackBar_ValueChanged(object sender, EventArgs e)
         {
             nodeSize = gridSizeTrackBar.Value;
             boxSizeLabel.Text = "Node Size: " + nodeSize;
             CreateGrid();
         }
-
         private void showNodeInfoCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             gridPictureBox.Invalidate();
@@ -252,82 +270,80 @@ namespace New_Pathfinder
             revealPath.RemoveAt(0);
             gridPictureBox.Invalidate();
         }
+        //void VisitNode(Point currentPos, int x, int y, ref Queue<Point> visitedNodes)
+        //{
+        //    Point neighbourPos = new Point(currentPos.X + x, currentPos.Y + y);
+        //    if (!grid[neighbourPos.X, neighbourPos.Y].isObstacle && !grid[neighbourPos.X, neighbourPos.Y].isVisited)
+        //    {
+        //        int currentDistance = grid[currentPos.X, currentPos.Y].distanceFromStart + 1;
+        //        if (currentDistance < grid[neighbourPos.X, neighbourPos.Y].distanceFromStart)
+        //        {
+        //            grid[neighbourPos.X, neighbourPos.Y].distanceFromStart = currentDistance;
+        //            grid[neighbourPos.X, neighbourPos.Y].previousVertex = currentPos;
+        //            visitedNodes.Enqueue(neighbourPos);
+        //        }
+        //    }
+        //}
+        //void findPathDijkstra()
+        //{
+        //    path.Clear();
+        //    revealPath.Clear();
 
-        void VisitNode(Point currentPos, int x, int y, ref Queue<Point> visitedNodes)
-        {
-            Point neighbourPos = new Point(currentPos.X + x, currentPos.Y + y);
-            if (!grid[neighbourPos.X, neighbourPos.Y].isObstacle && !grid[neighbourPos.X, neighbourPos.Y].isVisited)
-            {
-                int currentDistance = grid[currentPos.X, currentPos.Y].distanceFromStart + 1;
-                if (currentDistance < grid[neighbourPos.X, neighbourPos.Y].distanceFromStart)
-                {
-                    grid[neighbourPos.X, neighbourPos.Y].distanceFromStart = currentDistance;
-                    grid[neighbourPos.X, neighbourPos.Y].previousVertex = currentPos;
-                    visitedNodes.Enqueue(neighbourPos);
-                }
-            }
-        }
+        //    // Reset variables
+        //    for (int y = 0; y < gridSize; y++)
+        //    {
+        //        for (int x = 0; x < gridSize; x++)
+        //        {
+        //            grid[x, y].isVisited = false;
+        //            grid[x, y].distanceFromStart = maxGridSize * maxGridSize;
+        //            grid[x, y].previousVertex = new Point();
+        //        }
+        //    }
 
-        void findPathDijkstra()
-        {
-            path.Clear();
-            revealPath.Clear();
+        //    grid[startPos.X, startPos.Y].distanceFromStart = 0;
+        //    grid[startPos.X, startPos.Y].previousVertex = startPos;
 
-            // Reset variables
-            for (int y = 0; y < gridSize; y++)
-            {
-                for (int x = 0; x < gridSize; x++)
-                {
-                    grid[x, y].isVisited = false;
-                    grid[x, y].distanceFromStart = maxGridSize * maxGridSize;
-                    grid[x, y].previousVertex = new Point();
-                }
-            }
+        //    Point currentPos = startPos;
+        //    Queue<Point> visitedNodes = new Queue<Point>();
+        //    while (currentPos != endPos)
+        //    {
+        //        if (currentPos.Y > 0) // Up
+        //            VisitNode(currentPos, 0, -1, ref visitedNodes);
+        //        if (currentPos.X > 0) // Left
+        //            VisitNode(currentPos, -1, 0, ref visitedNodes);
+        //        if (currentPos.Y < gridSize - 1) // Down
+        //            VisitNode(currentPos, 0, 1, ref visitedNodes);
+        //        if (currentPos.X < gridSize - 1) // Right
+        //            VisitNode(currentPos, 1, 0, ref visitedNodes);
 
-            grid[startPos.X, startPos.Y].distanceFromStart = 0;
-            grid[startPos.X, startPos.Y].previousVertex = startPos;
+        //        if (visitedNodes.Count == 0) // Reached dead end, path not found.
+        //        {
+        //            pathLengthLabel.Text = "Path Length: ∞";
+        //            return;
+        //        }
 
-            Point currentPos = startPos;
-            Queue<Point> visitedNodes = new Queue<Point>();
-            while (currentPos != endPos)
-            {
-                if (currentPos.Y > 0) // Up
-                    VisitNode(currentPos, 0, -1, ref visitedNodes);
-                if (currentPos.X > 0) // Left
-                    VisitNode(currentPos, -1, 0, ref visitedNodes);
-                if (currentPos.Y < gridSize - 1) // Down
-                    VisitNode(currentPos, 0, 1, ref visitedNodes);
-                if (currentPos.X < gridSize - 1) // Right
-                    VisitNode(currentPos, 1, 0, ref visitedNodes);
+        //        grid[currentPos.X, currentPos.Y].isVisited = true;
+        //        currentPos = visitedNodes.Dequeue();
+        //    }
 
-                if (visitedNodes.Count == 0) // Reached dead end, path not found.
-                {
-                    pathLengthLabel.Text = "Path Length: ∞";
-                    return;
-                }
+        //    Point previous = endPos;
+        //    while (grid[previous.X, previous.Y].previousVertex != startPos) // Backtracking
+        //    {
+        //        previous = grid[previous.X, previous.Y].previousVertex;
+        //        path.Add(previous);
+        //    }
+        //    path.Reverse();
+        //    gridPictureBox.Invalidate();
 
-                grid[currentPos.X, currentPos.Y].isVisited = true;
-                currentPos = visitedNodes.Dequeue();
-            }
+        //    pathLengthLabel.Text = "Path Length: " + (path.Count + 1).ToString();
 
-            Point previous = endPos;
-            while (grid[previous.X, previous.Y].previousVertex != startPos) // Backtracking
-            {
-                previous = grid[previous.X, previous.Y].previousVertex;
-                path.Add(previous);
-            }
-            path.Reverse();
-            gridPictureBox.Invalidate();
-
-            pathLengthLabel.Text = "Path Length: " + (path.Count + 1).ToString();
-
-            if(revealPathCheckBox.Checked)
-            {
-                revealPath = new List<Point>(path);
-                path.Clear();
-                revealPathTimer.Start();
-            }
-        }
+        //    if(revealPathCheckBox.Checked)
+        //    {
+        //        revealPath = new List<Point>(path);
+        //        path.Clear();
+        //        revealPathTimer.Start();
+        //    }
+        //}
 
 
         bool mouseDown = false;
@@ -337,7 +353,6 @@ namespace New_Pathfinder
             lastClickedGrid = new Point(e.X / nodeSize, e.Y / nodeSize);
             ToggleGrid(lastClickedGrid);
         }
-
         private void gridPictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDown = false;
@@ -355,7 +370,6 @@ namespace New_Pathfinder
                 ToggleGrid(clickedGrid);
             }
         }
-
         void ToggleGrid(Point pos)
         {
             if (pos.X >= maxGridSize || pos.Y >= maxGridSize) return;
@@ -382,8 +396,10 @@ namespace New_Pathfinder
             gridPictureBox.Invalidate();
 
             if (autoPathfindCheckBox.Checked) // auto find path after modifying (experimental)
-                findPathDijkstra();
+                FindPathDijkstra();
         }
+
+        #region Dumb Experimental Stuff
 
         int r = 255, g = 0, b = 0;
         private void rgbCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -391,7 +407,7 @@ namespace New_Pathfinder
             rgbTimer.Enabled = rgbCheckBox.Checked;
         }
 
-        private void rgbTimer_Tick(object sender, EventArgs e) // LOL experimental stuff
+        private void rgbTimer_Tick(object sender, EventArgs e)
         {
             if (r > 0 && b == 0)
             {
@@ -414,5 +430,6 @@ namespace New_Pathfinder
             obstacleBrush = new SolidBrush(Color.FromArgb(r,g,b));
             gridPictureBox.Invalidate();
         }
+        #endregion
     }
 }

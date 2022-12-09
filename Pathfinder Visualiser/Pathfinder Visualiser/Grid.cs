@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace New_Pathfinder
 {
-    internal class Grid
+    public class Grid
     {
         public bool isVisited = false;
         public bool isObstacle = false;

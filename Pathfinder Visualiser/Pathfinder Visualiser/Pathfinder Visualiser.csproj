@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dijkstra.cs" />
     <Compile Include="Form.cs">
       <SubType>Form</SubType>
     </Compile>

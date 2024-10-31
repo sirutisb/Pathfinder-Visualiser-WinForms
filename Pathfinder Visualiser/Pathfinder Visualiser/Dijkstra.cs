@@ -29,7 +29,6 @@ namespace Pathfinder_Visualiser
                 }
             }
 
-
             grid[startPos.X, startPos.Y].distanceFromStart = 0;
             grid[startPos.X, startPos.Y].previousVertex = startPos;
             while (currentPos != endPos)

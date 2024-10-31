@@ -48,7 +48,6 @@
             this.gridSizeTextBox = new System.Windows.Forms.TextBox();
             this.gridPictureBox = new System.Windows.Forms.PictureBox();
             this.revealPathTimer = new System.Windows.Forms.Timer(this.components);
-            this.rgbTimer = new System.Windows.Forms.Timer(this.components);
             this.panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pathIntervalTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridSizeTrackBar)).BeginInit();
@@ -325,7 +324,6 @@
         private System.Windows.Forms.Label pathIntervalLabel;
         private System.Windows.Forms.TrackBar pathIntervalTrackBar;
         private System.Windows.Forms.Label boxSizeLabel;
-        private System.Windows.Forms.Timer rgbTimer;
         private System.Windows.Forms.CheckBox autoResizeCheckBox;
     }
 }

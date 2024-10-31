@@ -173,14 +173,14 @@ namespace New_Pathfinder
                 pathLengthLabel.Text = "Path Length: ∞";
                 return;
             }
+            pathLengthLabel.Text = "Path Length: " + (path.Count + 1).ToString();
+
             if (revealPathCheckBox.Checked)
             {
                 revealPath = new List<Point>(path);
                 path.Clear();
                 revealPathTimer.Start();
             }
-
-            pathLengthLabel.Text = "Path Length: " + (path.Count + 1).ToString();
             gridPictureBox.Invalidate();
         }
 

@@ -323,38 +323,5 @@ namespace New_Pathfinder
             if (autoPathfindCheckBox.Checked) // auto find path after modifying (experimental)
                 FindPathDijkstra();
         }
-
-        #region Dumb Experimental Stuff
-
-        int r = 255, g = 0, b = 0;
-        private void rgbCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            rgbTimer.Enabled = rgbCheckBox.Checked;
-        }
-
-        private void rgbTimer_Tick(object sender, EventArgs e)
-        {
-            if (r > 0 && b == 0)
-            {
-                r--;
-                g++;
-            }
-            if (g > 0 && r == 0)
-            {
-                g--;
-                b++;
-            }
-            if (b > 0 && g == 0)
-            {
-                b--;
-                r++;
-            }
-            trackBar1.Value = r;
-            trackBar2.Value = g;
-            trackBar3.Value = b;
-            obstacleBrush = new SolidBrush(Color.FromArgb(r,g,b));
-            gridPictureBox.Invalidate();
-        }
-        #endregion
     }
 }

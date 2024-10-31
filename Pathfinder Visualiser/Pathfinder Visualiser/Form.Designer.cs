@@ -31,10 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.panel = new System.Windows.Forms.Panel();
             this.autoResizeCheckBox = new System.Windows.Forms.CheckBox();
-            this.trackBar3 = new System.Windows.Forms.TrackBar();
-            this.trackBar2 = new System.Windows.Forms.TrackBar();
-            this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.rgbCheckBox = new System.Windows.Forms.CheckBox();
             this.pathIntervalLabel = new System.Windows.Forms.Label();
             this.pathIntervalTrackBar = new System.Windows.Forms.TrackBar();
             this.revealPathCheckBox = new System.Windows.Forms.CheckBox();
@@ -54,9 +50,6 @@
             this.revealPathTimer = new System.Windows.Forms.Timer(this.components);
             this.rgbTimer = new System.Windows.Forms.Timer(this.components);
             this.panel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pathIntervalTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridSizeTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridPictureBox)).BeginInit();
@@ -67,10 +60,6 @@
             this.panel.AutoScroll = true;
             this.panel.BackColor = System.Drawing.SystemColors.ControlDark;
             this.panel.Controls.Add(this.autoResizeCheckBox);
-            this.panel.Controls.Add(this.trackBar3);
-            this.panel.Controls.Add(this.trackBar2);
-            this.panel.Controls.Add(this.trackBar1);
-            this.panel.Controls.Add(this.rgbCheckBox);
             this.panel.Controls.Add(this.pathIntervalLabel);
             this.panel.Controls.Add(this.pathIntervalTrackBar);
             this.panel.Controls.Add(this.revealPathCheckBox);
@@ -96,54 +85,12 @@
             // 
             this.autoResizeCheckBox.AutoSize = true;
             this.autoResizeCheckBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.autoResizeCheckBox.Location = new System.Drawing.Point(0, 511);
+            this.autoResizeCheckBox.Location = new System.Drawing.Point(0, 359);
             this.autoResizeCheckBox.Name = "autoResizeCheckBox";
-            this.autoResizeCheckBox.Size = new System.Drawing.Size(183, 17);
+            this.autoResizeCheckBox.Size = new System.Drawing.Size(200, 17);
             this.autoResizeCheckBox.TabIndex = 19;
             this.autoResizeCheckBox.Text = "Auto Resize";
             this.autoResizeCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // trackBar3
-            // 
-            this.trackBar3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar3.Location = new System.Drawing.Point(0, 466);
-            this.trackBar3.Maximum = 256;
-            this.trackBar3.Name = "trackBar3";
-            this.trackBar3.Size = new System.Drawing.Size(183, 45);
-            this.trackBar3.TabIndex = 18;
-            this.trackBar3.Value = 100;
-            // 
-            // trackBar2
-            // 
-            this.trackBar2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar2.Location = new System.Drawing.Point(0, 421);
-            this.trackBar2.Maximum = 256;
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(183, 45);
-            this.trackBar2.TabIndex = 17;
-            this.trackBar2.Value = 100;
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar1.Location = new System.Drawing.Point(0, 376);
-            this.trackBar1.Maximum = 256;
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(183, 45);
-            this.trackBar1.TabIndex = 16;
-            this.trackBar1.Value = 100;
-            // 
-            // rgbCheckBox
-            // 
-            this.rgbCheckBox.AutoSize = true;
-            this.rgbCheckBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rgbCheckBox.Location = new System.Drawing.Point(0, 359);
-            this.rgbCheckBox.Name = "rgbCheckBox";
-            this.rgbCheckBox.Size = new System.Drawing.Size(183, 17);
-            this.rgbCheckBox.TabIndex = 15;
-            this.rgbCheckBox.Text = "RGB";
-            this.rgbCheckBox.UseVisualStyleBackColor = true;
-            this.rgbCheckBox.CheckedChanged += new System.EventHandler(this.rgbCheckBox_CheckedChanged);
             // 
             // pathIntervalLabel
             // 
@@ -163,7 +110,7 @@
             this.pathIntervalTrackBar.Maximum = 1000;
             this.pathIntervalTrackBar.Minimum = 1;
             this.pathIntervalTrackBar.Name = "pathIntervalTrackBar";
-            this.pathIntervalTrackBar.Size = new System.Drawing.Size(183, 45);
+            this.pathIntervalTrackBar.Size = new System.Drawing.Size(200, 45);
             this.pathIntervalTrackBar.TabIndex = 13;
             this.pathIntervalTrackBar.Value = 100;
             this.pathIntervalTrackBar.ValueChanged += new System.EventHandler(this.pathIntervalTrackBar_ValueChanged);
@@ -174,7 +121,7 @@
             this.revealPathCheckBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.revealPathCheckBox.Location = new System.Drawing.Point(0, 284);
             this.revealPathCheckBox.Name = "revealPathCheckBox";
-            this.revealPathCheckBox.Size = new System.Drawing.Size(183, 17);
+            this.revealPathCheckBox.Size = new System.Drawing.Size(200, 17);
             this.revealPathCheckBox.TabIndex = 12;
             this.revealPathCheckBox.Text = "Show Path Animation";
             this.revealPathCheckBox.UseVisualStyleBackColor = true;
@@ -207,7 +154,7 @@
             this.showNodeInfoCheckBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.showNodeInfoCheckBox.Location = new System.Drawing.Point(0, 241);
             this.showNodeInfoCheckBox.Name = "showNodeInfoCheckBox";
-            this.showNodeInfoCheckBox.Size = new System.Drawing.Size(183, 17);
+            this.showNodeInfoCheckBox.Size = new System.Drawing.Size(200, 17);
             this.showNodeInfoCheckBox.TabIndex = 9;
             this.showNodeInfoCheckBox.Text = "Show Node Info";
             this.showNodeInfoCheckBox.UseVisualStyleBackColor = true;
@@ -219,7 +166,7 @@
             this.autoPathfindCheckBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.autoPathfindCheckBox.Location = new System.Drawing.Point(0, 224);
             this.autoPathfindCheckBox.Name = "autoPathfindCheckBox";
-            this.autoPathfindCheckBox.Size = new System.Drawing.Size(183, 17);
+            this.autoPathfindCheckBox.Size = new System.Drawing.Size(200, 17);
             this.autoPathfindCheckBox.TabIndex = 8;
             this.autoPathfindCheckBox.Text = "Auto Find Path";
             this.autoPathfindCheckBox.UseVisualStyleBackColor = true;
@@ -242,7 +189,7 @@
             this.gridSizeTrackBar.Maximum = 125;
             this.gridSizeTrackBar.Minimum = 5;
             this.gridSizeTrackBar.Name = "gridSizeTrackBar";
-            this.gridSizeTrackBar.Size = new System.Drawing.Size(183, 45);
+            this.gridSizeTrackBar.Size = new System.Drawing.Size(200, 45);
             this.gridSizeTrackBar.TabIndex = 6;
             this.gridSizeTrackBar.Value = 75;
             this.gridSizeTrackBar.ValueChanged += new System.EventHandler(this.gridSizeTrackBar_ValueChanged);
@@ -251,9 +198,9 @@
             // 
             this.findPathButton.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.findPathButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.findPathButton.Location = new System.Drawing.Point(0, 528);
+            this.findPathButton.Location = new System.Drawing.Point(0, 415);
             this.findPathButton.Name = "findPathButton";
-            this.findPathButton.Size = new System.Drawing.Size(183, 35);
+            this.findPathButton.Size = new System.Drawing.Size(200, 35);
             this.findPathButton.TabIndex = 5;
             this.findPathButton.Text = "Find Path";
             this.findPathButton.UseVisualStyleBackColor = false;
@@ -265,7 +212,7 @@
             this.loadGridButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.loadGridButton.Location = new System.Drawing.Point(0, 131);
             this.loadGridButton.Name = "loadGridButton";
-            this.loadGridButton.Size = new System.Drawing.Size(183, 35);
+            this.loadGridButton.Size = new System.Drawing.Size(200, 35);
             this.loadGridButton.TabIndex = 4;
             this.loadGridButton.Text = "Load Grid";
             this.loadGridButton.UseVisualStyleBackColor = false;
@@ -277,7 +224,7 @@
             this.saveGridButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.saveGridButton.Location = new System.Drawing.Point(0, 96);
             this.saveGridButton.Name = "saveGridButton";
-            this.saveGridButton.Size = new System.Drawing.Size(183, 35);
+            this.saveGridButton.Size = new System.Drawing.Size(200, 35);
             this.saveGridButton.TabIndex = 3;
             this.saveGridButton.Text = "Save Grid";
             this.saveGridButton.UseVisualStyleBackColor = false;
@@ -289,7 +236,7 @@
             this.clearGridButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.clearGridButton.Location = new System.Drawing.Point(0, 61);
             this.clearGridButton.Name = "clearGridButton";
-            this.clearGridButton.Size = new System.Drawing.Size(183, 35);
+            this.clearGridButton.Size = new System.Drawing.Size(200, 35);
             this.clearGridButton.TabIndex = 2;
             this.clearGridButton.Text = "Clear Grid";
             this.clearGridButton.UseVisualStyleBackColor = false;
@@ -301,7 +248,7 @@
             this.createGridButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.createGridButton.Location = new System.Drawing.Point(0, 26);
             this.createGridButton.Name = "createGridButton";
-            this.createGridButton.Size = new System.Drawing.Size(183, 35);
+            this.createGridButton.Size = new System.Drawing.Size(200, 35);
             this.createGridButton.TabIndex = 1;
             this.createGridButton.Text = "Create Grid";
             this.createGridButton.UseVisualStyleBackColor = false;
@@ -314,7 +261,7 @@
             this.gridSizeTextBox.Location = new System.Drawing.Point(0, 0);
             this.gridSizeTextBox.MaxLength = 3;
             this.gridSizeTextBox.Name = "gridSizeTextBox";
-            this.gridSizeTextBox.Size = new System.Drawing.Size(183, 26);
+            this.gridSizeTextBox.Size = new System.Drawing.Size(200, 26);
             this.gridSizeTextBox.TabIndex = 0;
             // 
             // gridPictureBox
@@ -334,11 +281,6 @@
             // 
             this.revealPathTimer.Tick += new System.EventHandler(this.revealPathTimer_Tick);
             // 
-            // rgbTimer
-            // 
-            this.rgbTimer.Interval = 1;
-            this.rgbTimer.Tick += new System.EventHandler(this.rgbTimer_Tick);
-            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -356,9 +298,6 @@
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form_KeyUp);
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pathIntervalTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridSizeTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridPictureBox)).EndInit();
@@ -387,10 +326,6 @@
         private System.Windows.Forms.TrackBar pathIntervalTrackBar;
         private System.Windows.Forms.Label boxSizeLabel;
         private System.Windows.Forms.Timer rgbTimer;
-        private System.Windows.Forms.CheckBox rgbCheckBox;
-        private System.Windows.Forms.TrackBar trackBar3;
-        private System.Windows.Forms.TrackBar trackBar2;
-        private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.CheckBox autoResizeCheckBox;
     }
 }
